@@ -24,7 +24,7 @@ def receive():
         files = os.listdir("./images")
 
         remove_background.remove('./images/' + secure_filename(f.filename))                                             
-        predition = model.predict_food_transfer(model_transfer, test_transform, class_names, './images/result.jpg')
+        predition = model.predict(model_transfer, test_transform, class_names, './images/result.jpg')
 
         os.remove('./images/' + secure_filename(f.filename))
 
