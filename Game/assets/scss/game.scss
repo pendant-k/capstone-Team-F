@@ -1,56 +1,110 @@
-.gameContainer {
+.container {
+  background: #393E46;
   display: flex;
-  width: 90%;
-  margin: 0 auto;
-  justify-content: center;
-  .canvas,
+  .gameContainer {
+    position: relative;
+    top: 29px;
+    width: 740px;
+    height: 780px;
+    background: #00ADB5;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    border-radius: 15px;
+    margin-right: 27px;
+    padding: 20px;
+    padding-top: 100px;
+    .timer {
+      position: absolute;
+      left: 20px;
+      top: 18px;
+      width: 176px;
+      height: 65px;
+      background: #EEEEEE;
+      box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+      border-radius: 15px;
+    }
+    .inform {
+      position: absolute;
+      left: 216px;
+      top: 18px;
+      width: 504px;
+      height: 65px;
+      font-family: 'Apple LiGothic';
+      font-style: normal;
+      font-weight: 400;
+      font-size: 30px;
+      display: flex;
+      align-items: center;
+      text-align: center;
+      color: #FFFFFF;
+    }
+    .canvas
+    .main {
+      #jsCanvas {
+        width: 700px;
+        height: 700px;
+      }
+      .controls {
+        margin-top: 25px;
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+        .colors {
+          margin: 20px;
+          display: flex;
+          &:hover .color {
+            opacity: 0.95;
+            transform: translateX(-3px);
+          }
+        }
+        button {
+          margin-left: 25px;
+          box-shadow: 0 4px 6px rgba(50, 50, 93, 0.11),
+            0 1px 3px rgba(0, 0, 0, 0.08);
+          border: 0px;
+          padding: 5px 7px;
+          min-width: 50px;
+  
+          border-radius: 5px;
+          font-weight: 600;
+          border: 2px solid rgb(142, 142, 147);
+          color: rgb(142, 142, 147);
+          font-size: 14px;
+          cursor: pointer;
+          transition: transform 0.1s linear;
+          &:active {
+            transform: scale(0.98);
+          }
+        }
+      }
+    }
+    .gameName {
+      position: absolute;
+      left: 775px;
+      top: 690px;
+      width: 176px;
+      height: 65px;
+      border-radius: 15px;
+      font-family: 'Apple LiGothic';
+      font-style: normal;
+      font-weight: 400;
+      font-size: 30px;
+      line-height: 40px;
+      display: flex;
+      align-items: center;
+      text-align: center;
+      color: #EEEEEE;
+      text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    }
+  }
   .chatMessages {
     background-color: white;
     height: 80vh;
     border-radius: 10px;
     box-shadow: 0 3px 36px rgba(23, 55, 87, 0.1), 0 5px 15px rgba(0, 0, 0, 0.07);
   }
-  .main {
-    margin-right: 200px;
-    #jsCanvas {
-      width: 700px;
-      height: 700px;
-    }
-    .controls {
-      margin-top: 25px;
-      display: flex;
-      align-items: center;
-      flex-direction: column;
-      .colors {
-        margin: 20px;
-        display: flex;
-        &:hover .color {
-          opacity: 0.95;
-          transform: translateX(-3px);
-        }
-      }
-      button {
-        margin-left: 25px;
-        box-shadow: 0 4px 6px rgba(50, 50, 93, 0.11),
-          0 1px 3px rgba(0, 0, 0, 0.08);
-        border: 0px;
-        padding: 5px 7px;
-        min-width: 50px;
-
-        border-radius: 5px;
-        font-weight: 600;
-        border: 2px solid rgb(142, 142, 147);
-        color: rgb(142, 142, 147);
-        font-size: 14px;
-        cursor: pointer;
-        transition: transform 0.1s linear;
-        &:active {
-          transform: scale(0.98);
-        }
-      }
-    }
-  }
   .chat {
-      width: 20%;
+    position: relative;
+    top: 29px;
+    width: 20%;
   }
 }

@@ -8,7 +8,7 @@ const INITIAL_COLOR = "#2c2c2c";
 const CANVAS_SIZE = 700;
 
 canvas.width = CANVAS_SIZE;
-canvas.height = CANVAS_SIZE;
+canvas.height = CANVAS_SIZE - 100;
 
 ctx.fillStyle = "white";
 ctx.fillRect(0, 0, CANVAS_SIZE, CANVAS_SIZE);

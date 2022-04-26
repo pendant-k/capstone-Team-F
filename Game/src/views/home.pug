@@ -7,18 +7,16 @@ html(lang="en")
         link(rel="stylesheet", href="styles/styles.css")
         title AI,GO DOODLE!
     body
-        .header
-            h1.main__title AI, GO DOODLE!
-            #jsLogout
-        .loginBox
-            form#jsLogin
-                input(placeholder="닉네임을 입력해주세요",type="text")
-        .gameContainer#jsGame
-            .main
-                #jsNotifs
-                canvas.canvas#jsCanvas
-                .controls#jsControls
-                    button#jsRemove 지우기
+        .container
+            .gameContainer#jsGame
+                .timer
+                .inform 잠시후 게임이 시작됩니다.
+                .main
+                    #jsNotifs
+                    canvas.canvas#jsCanvas
+                    .controls#jsControls
+                        button#jsRemove 지우기
+                .gameName AI, GO DOODLE
             .chat
                 .player__board#jsPBoard
                 ul.chat__messages#jsMessages
