@@ -2,7 +2,7 @@ import { initSockets } from "./sockets";
 
 const body = document.querySelector("body");
 const loginForm = document.getElementById("jsLogin");
-const logout = document.getElementById("jsLogout");
+// const logout = document.getElementById("jsLogout");
 
 const NICKNAME = "nickname";
 const LOGGED_OUT = "loggedOut";
@@ -33,7 +33,7 @@ const handleFormSubmit = (e) => {
     input.value = "";
     localStorage.setItem(NICKNAME, value);
     body.className = LOGGED_IN;
-    logout.className = LOGGED_IN;
+    // logout.className = LOGGED_IN;
     // socket에 넘겨주기
     logIn(value);
 };
@@ -45,9 +45,9 @@ const handleLogout = (e) => {
     localStorage.clear();
     location.reload();
 };
-if (logout) {
-    const button = document.createElement("button");
-    button.innerText = "로그아웃";
-    button.addEventListener("click", handleLogout);
-    logout.appendChild(button);
-}
+// if (logout) {
+//     const button = document.createElement("button");
+//     button.innerText = "로그아웃";
+//     button.addEventListener("click", handleLogout);
+//     logout.appendChild(button);
+// }

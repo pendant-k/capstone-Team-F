@@ -7,10 +7,15 @@ html(lang="en")
         link(rel="stylesheet", href="styles/styles.css")
         title AI,GO DOODLE!
     body
-        .container
+        .loginBox
+                h1.loginBox__title AI, GO DOODLE!
+                form#jsLogin
+                    input(type="text", placeholder="닉네임을 설정해주세요.")
+                p.submitText 엔터를 눌러 입장해주세요.
+        .container#jsContainer
             .gameContainer#jsGame
                 .timer
-                .inform 잠시후 게임이 시작됩니다.
+                .inform#jsInfo 잠시후 게임이 시작됩니다.
                 .main
                     #jsNotifs
                     canvas.canvas#jsCanvas
@@ -18,7 +23,8 @@ html(lang="en")
                         button#jsRemove 지우기
                 .gameName AI, GO DOODLE
             .chat
-                .player__board#jsPBoard
+                .user__count#jsUsers
+                //- .player__board#jsPBoard
                 ul.chat__messages#jsMessages
                 form.chat__form#jsSendMsg
                     input(placeholder="메시지를 입력해주세요.", type="text")

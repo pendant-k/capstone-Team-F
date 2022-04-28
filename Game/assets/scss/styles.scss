@@ -37,7 +37,7 @@ body {
       margin-bottom: 30px;
       font-size: 40px;
   }
-  // 로그인 박스 & game div 분기 시키기
+  로그인 박스 & game div 분기 시키기
   .header{
     #jsLogout {
       display: none;
@@ -47,18 +47,25 @@ body {
     }
   }
   .loginBox,
-  .gameContainer {
+  .gameContainer,
+  .chat {
     display: none;
   }
+  
   &.loggedOut {
     .loginBox {
       display: block;
     }
   }
   &.loggedIn {
-    .gameContainer {
+    .gameContainer
+    {
       display: flex;
     }
+    .chat {
+      display: block;
+    }
+
   }
 }
 

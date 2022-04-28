@@ -39,6 +39,9 @@
     }
     .canvas
     .main {
+      .alert {
+        color: white;
+      }
       #jsCanvas {
         width: 700px;
         height: 700px;
@@ -80,7 +83,7 @@
     .gameName {
       position: absolute;
       left: 775px;
-      top: 690px;
+      top: 700px;
       width: 176px;
       height: 65px;
       border-radius: 15px;
