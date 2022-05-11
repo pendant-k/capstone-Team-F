@@ -13,7 +13,8 @@ canvas.height = CANVAS_SIZE - 100;
 ctx.fillStyle = "white";
 ctx.fillRect(0, 0, CANVAS_SIZE, CANVAS_SIZE);
 ctx.strokeStyle = INITIAL_COLOR;
-ctx.lineWidth = 2.5;
+ctx.lineWidth = 20;
+ctx.lineCap = "round";
 
 let painting = false;
 

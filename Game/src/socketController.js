@@ -9,15 +9,17 @@ let userDataList = [];
 let inProgress = false;
 let isPlaying = false;
 // 제시어 -> 랜덤 설정 예정
-let msg = "강아지";
+let msg = "사과";
 
 const getResult = async (userDataList) => {
     // AI server url 넣을 거임
     const url = "http://54.153.60.130:5000/get/userlist";
     let json = JSON.stringify({ keyword: "apple", users: userDataList });
     try {
-        const gameResult = await axios.post(url, json);
-        console.log(gameResult);
+        const gameResult = await axios.post(url, json, {
+            headers: { "content-type": "application/json" },
+        });
+        console.log(gameResult.data);
     } catch (e) {
         console.log("python server connect error", e);
     }
@@ -37,7 +39,7 @@ const socketController = (socket, io) => {
 
     const startGame = () => {
         console.log("game start!");
-        let startTimer = 20;
+        let startTimer = 5;
         if (inProgress === false) {
             inProgress = true;
             // game start count down
@@ -55,7 +57,7 @@ const socketController = (socket, io) => {
     };
 
     const inGame = () => {
-        let gameTimer = 30;
+        let gameTimer = 50;
         let gameCountDown = setInterval(() => {
             broadcastAll(events.gameCount, { timer: gameTimer });
             gameTimer--;
