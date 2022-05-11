@@ -1,4 +1,5 @@
 import events from "./events";
+import axios from "axios";
 
 let sockets = [];
 let userDataList = [];
@@ -9,6 +10,20 @@ let inProgress = false;
 let isPlaying = false;
 // 제시어 -> 랜덤 설정 예정
 let msg = "강아지";
+
+const getResult = async (userDataList) => {
+    // AI server url 넣을 거임
+    const url = "example.com";
+    try {
+        const gameResult = await axios.post(url, {
+            keyword: msg,
+            users: userDataList,
+        });
+        console.log(gameResult);
+    } catch (e) {
+        console.log("python server connect error", e);
+    }
+};
 
 // server.js에서 받아온 socket과 io(서버 자체)를 통해 socket 이벤트 처리
 const socketController = (socket, io) => {
@@ -93,6 +108,7 @@ const socketController = (socket, io) => {
         if (userDataList.length === sockets.length) {
             console.log("유저 데이터 받아오기 테스트입니다.");
             console.log(userDataList);
+            getResult(userDataList);
         }
     });
 };
