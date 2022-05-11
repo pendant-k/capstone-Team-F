@@ -32,7 +32,6 @@ export const handleGameEnd = () => {
     let dataURL = image.toDataURL();
     let user = { nickname: nickname, image: dataURL };
 
-    console.log("캔버스 data를 출력합니다.");
     console.log(dataURL);
     getSocket().emit(window.events.uploadImg, { user: user });
 };
