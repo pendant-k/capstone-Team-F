@@ -1,6 +1,11 @@
 import { handleNewMessage } from "./chat";
 import { handleDisconnectUser, handleNewUser } from "./notifications";
-import { handleGameStart, handleGameStarted } from "./game";
+import {
+    handleGameStart,
+    handleGameStarted,
+    handleGameCount,
+    handleGameEnd,
+} from "./game";
 import { handleUploadImg } from "./uploadImg";
 import { handleUserUpdate } from "./users";
 
@@ -21,6 +26,8 @@ export const initSockets = (aSocket) => {
     aSocket.on(events.newMsg, handleNewMessage);
     aSocket.on(events.uploadImg, handleUploadImg);
     aSocket.on(events.userUpdate, handleUserUpdate);
-    aSocket.on(events.gameStart, handleGameStart);
+    aSocket.on(events.startCount, handleGameStart);
     aSocket.on(events.gameStarted, handleGameStarted);
+    aSocket.on(events.gameCount, handleGameCount);
+    aSocket.on(events.gameEnd, handleGameEnd);
 };
