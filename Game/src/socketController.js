@@ -1,6 +1,7 @@
 import events from "./events";
 
 let sockets = [];
+let userDataList = [];
 // game start timer
 // game start boolean
 // true 일 때 유저 입장 막기
@@ -33,10 +34,24 @@ const socketController = (socket, io) => {
                 startTimer--;
                 if (startTimer === 0) {
                     broadcastAll(events.gameStarted, { msg });
+                    inGame();
                     clearInterval(startCountDown);
                 }
             }, 1000);
         }
+    };
+
+    const inGame = () => {
+        let gameTimer = 30;
+        let gameCountDown = setInterval(() => {
+            broadcastAll(events.gameCount, { timer: gameTimer });
+            gameTimer--;
+            if (gameTimer === 0) {
+                console.log("게임 종료!");
+                broadcastAll(events.gameEnd);
+                clearInterval(gameCountDown);
+            }
+        }, 1000);
     };
 
     const endGame = () => {
@@ -73,10 +88,16 @@ const socketController = (socket, io) => {
         broadcast(events.newMsg, { message, nickname: socket.nickname });
     });
 
-    socket.on(events.uploadImg, () => {});
+    socket.on(events.uploadImg, ({ user }) => {
+        userDataList.push(user);
+        if (userDataList.length === sockets.length) {
+            console.log("유저 데이터 받아오기 테스트입니다.");
+            console.log(userDataList);
+        }
+    });
 };
 
 // 접속한 유저 print
-setInterval(() => console.log(sockets), 10000);
+// setInterval(() => console.log(sockets), 10000);
 
 export default socketController;

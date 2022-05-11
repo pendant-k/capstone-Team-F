@@ -12,6 +12,8 @@ const events = {
     gameStart: "gameStart",
     startCount: "startCount",
     gameStarted: "gameStarted",
+    gameCount: "gameCount",
+    gameEnd: "gameEnd",
 };
 
 export default events;
