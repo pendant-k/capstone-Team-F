@@ -47,13 +47,9 @@ def preprocess(user_image):
     img = np.array(Image.open(user_image))
     image=cv2.resize(img,dsize=(32,32))
     image=np.array(image)
-
-    print(image.shape)
-    print(image.size)
-    print(len(image))
-
     image=image.reshape(1,1,32,32)
     image=image.astype('float32')/255.0
+    image=1-image
     image=torch.from_numpy(image)
 
     return image
@@ -197,6 +193,43 @@ def get_json4():
 
         output['result'].append({
             "num": i,
+            "predict": keyword,
+            "accuracy": acc
+        })
+
+    return jsonify(output)
+
+
+#input이 keyword, userlist [nickname, image]의 json 일 때
+@app.route('/get/userlist', methods=['POST'])
+def get_userlist():
+    input = request.get_json(silent=True)
+
+    keywords_list,models_list = get_keywords_and_models()
+
+    output = {}
+    output['result'] = []
+
+    keyword = input["keyword"]
+    userlist = input["users"]
+    for user in userlist:
+        nickname = user['nickname']
+        image = user['image']
+        base64_string = image.split(',')[1]
+        imgdata = base64.b64decode(base64_string)
+
+        io = StringIO()
+        print(f'new_image_{nickname}.jpg', file=io, end="")
+        imagefile =  io.getvalue()
+
+        image_path = "./images/" + imagefile
+        with open(image_path, 'wb') as f:
+            f.write(imgdata)
+
+        acc = accuracy_for_keyword(keyword, image_path, keywords_list, models_list)
+
+        output['result'].append({
+            "nickname": nickname,
             "predict": keyword,
             "accuracy": acc
         })
