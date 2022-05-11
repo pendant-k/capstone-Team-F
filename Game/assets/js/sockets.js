@@ -21,6 +21,6 @@ export const initSockets = (aSocket) => {
     aSocket.on(events.newMsg, handleNewMessage);
     aSocket.on(events.uploadImg, handleUploadImg);
     aSocket.on(events.userUpdate, handleUserUpdate);
-    aSocket.on(events.gameStart, handleGameStart);
+    aSocket.on(events.startCount, handleGameStart);
     aSocket.on(events.gameStarted, handleGameStarted);
 };
