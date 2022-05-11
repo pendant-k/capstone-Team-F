@@ -21,7 +21,7 @@ const socketController = (socket, io) => {
     const startGame = () => {
         if (inProgress === false) {
             inProgress = true;
-            setTimeout(() => broadcastAll(events.gameStarted, { msg }), 2000);
+            setTimeout(() => broadcastAll(events.gameStarted, { msg }), 10000);
         }
     };
 
@@ -63,7 +63,3 @@ const socketController = (socket, io) => {
 setInterval(() => console.log(sockets), 10000);
 
 export default socketController;
-
-// 제시어 랜덤
-// 데이터 넘기기
-// 타이머 기능

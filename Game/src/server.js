@@ -19,9 +19,6 @@ app.use(logger("dev"));
 
 // Routes
 // events 객체 넘겨주기
-// app.get("/game", (req, res) =>
-//     res.render("home", { events: JSON.stringify(events) })
-// );
 app.get("/", (req, res) =>
     // events 객체(global values) JSON 형식으로 보내기
     res.render("home", { events: JSON.stringify(events) })
@@ -38,6 +35,10 @@ const server = app.listen(PORT, handleListening);
 const io = socketIO(server);
 
 // control events
+// io 객체 넘겨서 전체 브로드캐스트용으로 사용하기
 io.on("connection", (socket) => socketController(socket, io));
 
-// game page에서 뒤로가기 했을 때
+// TODO :
+// 제시어 랜덤화하기
+// 데이터 넘기기
+// 타이머 기능
