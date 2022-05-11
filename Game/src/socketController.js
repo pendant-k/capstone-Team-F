@@ -13,12 +13,10 @@ let msg = "강아지";
 
 const getResult = async (userDataList) => {
     // AI server url 넣을 거임
-    const url = "example.com";
+    const url = "http://54.153.60.130:5000/get/userlist";
+    let json = JSON.stringify({ keyword: "apple", users: userDataList });
     try {
-        const gameResult = await axios.post(url, {
-            keyword: msg,
-            users: userDataList,
-        });
+        const gameResult = await axios.post(url, json);
         console.log(gameResult);
     } catch (e) {
         console.log("python server connect error", e);
