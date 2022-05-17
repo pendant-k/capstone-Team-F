@@ -5,6 +5,9 @@ html(lang="en")
         meta(http-equiv="X-UA-Compatible", content="IE=edge")
         meta(name="viewport", content="width=device-width, initial-scale=1.0")
         link(rel="stylesheet", href="styles/styles.css")
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&display=swap" rel="stylesheet">
         title AI,GO DOODLE!
     body
         .loginBox
@@ -16,11 +19,12 @@ html(lang="en")
             .gameContainer#jsGame
                 .timer#jsTimer
                 .inform#jsInfo 잠시후 게임이 시작됩니다.
+                .keyword#jsKeyword
                 .main
                     #jsNotifs
                     canvas.canvas#jsCanvas
                     .controls#jsControls
-                        button#jsRemove 지우기
+                        button#jsRemove ↺
                 .gameName AI, GO DOODLE
             .chat
                 .user__count#jsUsers

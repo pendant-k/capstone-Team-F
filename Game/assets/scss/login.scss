@@ -1,4 +1,7 @@
 input {
+  font-style: normal;
+  font-weight: 100;
+  font-family: 'Black Han Sans', sans-serif;
   padding: 10px;
   border: 0;
   background-color: $greyColor;
@@ -11,6 +14,9 @@ input {
 }
 
 .loginBox {
+  font-style: normal;
+  font-weight: 100;
+  font-family: 'Black Han Sans', sans-serif;
   box-shadow: $boxShadow;
   background-color: $mainColor;
   padding: 40px;

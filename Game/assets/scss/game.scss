@@ -1,11 +1,14 @@
 .container {
   background: #393E46;
+  font-style: normal;
+  font-weight: 100;
+  font-family: 'Black Han Sans', sans-serif;
   display: flex;
   .gameContainer {
     position: relative;
     top: 29px;
     width: 740px;
-    height: 780px;
+    height: 680px;
     background: #00ADB5;
     box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
     border-radius: 15px;
@@ -16,36 +19,41 @@
       position: absolute;
       left: 20px;
       top: 18px;
-      width: 176px;
+      width: 150px;
       height: 65px;
       background: #EEEEEE;
       box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
       border-radius: 15px;
+      font-size: 30px;
+      text-align: center;
+      padding: 16px 0;
     }
     .inform {
       position: absolute;
-      left: 216px;
-      top: 18px;
-      width: 504px;
-      height: 65px;
-      font-family: 'Apple LiGothic';
-      font-style: normal;
-      font-weight: 400;
-      font-size: 30px;
-      display: flex;
-      align-items: center;
+      left: 190px;
+      top: 10px;
+      width: 360px;
+      font-size: 25px;
+      line-height: 140%;
       text-align: center;
+      padding: 4px 0;
       color: #FFFFFF;
+    }
+    .keyword {
+      position: absolute;
+      left: 570px;
+      top: 18px;
+      width: 150px;
+      height: 65px;
+      background: #EEEEEE;
+      box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+      border-radius: 15px;
+      font-size: 30px;
+      text-align: center;
+      padding: 16px 0;
     }
     .canvas
     .main {
-      .alert {
-        color: white;
-      }
-      #jsCanvas {
-        width: 700px;
-        height: 700px;
-      }
       .controls {
         margin-top: 25px;
         display: flex;
@@ -59,37 +67,15 @@
             transform: translateX(-3px);
           }
         }
-        button {
-          margin-left: 25px;
-          box-shadow: 0 4px 6px rgba(50, 50, 93, 0.11),
-            0 1px 3px rgba(0, 0, 0, 0.08);
-          border: 0px;
-          padding: 5px 7px;
-          min-width: 50px;
-  
-          border-radius: 5px;
-          font-weight: 600;
-          border: 2px solid rgb(142, 142, 147);
-          color: rgb(142, 142, 147);
-          font-size: 14px;
-          cursor: pointer;
-          transition: transform 0.1s linear;
-          &:active {
-            transform: scale(0.98);
-          }
-        }
       }
     }
     .gameName {
       position: absolute;
-      left: 775px;
-      top: 700px;
+      left: 790px;
+      top: 640px;
       width: 176px;
       height: 65px;
       border-radius: 15px;
-      font-family: 'Apple LiGothic';
-      font-style: normal;
-      font-weight: 400;
       font-size: 30px;
       line-height: 40px;
       display: flex;
@@ -110,4 +96,28 @@
     top: 29px;
     width: 20%;
   }
+}
+button {
+  position: absolute;
+  left: 345px;
+  top: 620px;
+  box-shadow: 0 4px 6px rgba(50, 50, 93, 0.11),
+    0 1px 3px rgba(0, 0, 0, 0.08);
+  border: 0px;
+  padding: 4px 6px;
+  min-width: 50px;
+  border-radius: 5px;
+  font-weight: bold;
+  border: 2px solid #dadce0;
+  font-size: 20px;
+  cursor: pointer;
+  transition: transform 0.1s linear;
+  &:active {
+    transform: scale(0.98);
+  }
+}
+#jsCanvas {
+  box-shadow: 1px 1px 3px 1px #dadce0;
+  margin-left: 100px;
+  border-radius: 15px;
 }

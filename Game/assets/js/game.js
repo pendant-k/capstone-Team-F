@@ -2,6 +2,7 @@ import { getSocket } from "./sockets";
 
 const info = document.getElementById("jsInfo");
 const counter = document.getElementById("jsTimer");
+const answer = document.getElementById("jsKeyword");
 
 export const handleGameStart = ({ timer }) => {
     info.innerText = `${timer}초 후 게임이 시작됩니다.`;
@@ -11,12 +12,8 @@ export const handleGameStarted = ({ msg }) => {
     const word = document.createElement("span");
     word.innerText = msg;
 
-    // word styling
-    word.style.color = "white";
-    word.style.backgroundColor = "black";
-    word.style.marginLeft = "30px";
-    info.innerText = `게임이 시작되었습니다`;
-    info.appendChild(word);
+    info.innerText = `게임이 시작되었습니다.\n제시어를 캔버스에 그려주세요!`;
+    answer.appendChild(word);
 };
 
 export const handleGameCount = ({ timer }) => {

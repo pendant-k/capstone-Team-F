@@ -12,7 +12,23 @@ const appendMsg = (text, nickname) => {
     `;
 
     messages.appendChild(li);
+
+    if (messages.isScrollBottom) {
+        messages.scrollTop = messages.scrollHeight;
+      }
 };
+
+// 자동 스크롤 기능 추가
+
+messages.isScrollBottom = true;
+
+messages.addEventListener("scroll", (event) => {
+  if (event.target.scrollHeight - event.target.scrollTop === event.target.clientHeight) {
+    messages.isScrollBottom = true;
+  } else {
+    messages.isScrollBottom = false;
+  }
+});
 
 export const handleNewMessage = ({ message, nickname }) =>
     appendMsg(message, nickname);

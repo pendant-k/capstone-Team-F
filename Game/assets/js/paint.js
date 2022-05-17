@@ -5,10 +5,10 @@ const ctx = canvas.getContext("2d");
 const remove = document.getElementById("jsRemove");
 
 const INITIAL_COLOR = "#2c2c2c";
-const CANVAS_SIZE = 700;
+const CANVAS_SIZE = 500;
 
 canvas.width = CANVAS_SIZE;
-canvas.height = CANVAS_SIZE - 100;
+canvas.height = CANVAS_SIZE;
 
 ctx.fillStyle = "white";
 ctx.fillRect(0, 0, CANVAS_SIZE, CANVAS_SIZE);
