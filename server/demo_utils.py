@@ -27,8 +27,22 @@ def get_keywords_and_models(path='./',num_models=4):
     return keywords_list,models_list
 
 def preprocess(user_image):
-    image=cv2.resize(user_image,dsize=(32,32))
+    print("after change")
+
+    image=255-user_image
+    res,thr=cv2.threshold(image,127,255,cv2.THRESH_BINARY)
+    contours,_=cv2.findContours(thr,cv2.RETR_EXTERNAL,cv2.CHAIN_APPROX_SIMPLE)
+
+    cnt=contours[0]
+    x,y,w,h=cv2.boundingRect(cnt)
+    
+    image=image[y:y+h,x:x+w]
+    cv2.imshow('apple',image)
+    cv2.waitKey(0)
+
+    image=cv2.resize(image,dsize=(32,32))
     image=np.array(image)
+    
     image=image.reshape(1,1,32,32)
     image=image.astype('float32')/255.0
     image=torch.from_numpy(image)
@@ -52,9 +66,6 @@ def accuracy_for_keyword(keyword,user_image,keywords_list,models_list):
     y=model(x)
 
     y=y.detach().numpy()
-
-    print(y.shape)
-    print(y[0])
 
     exp_y=np.exp(y[0])
     exp_usr=exp_y[key_idx]
