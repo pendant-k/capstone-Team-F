@@ -9,12 +9,13 @@ let userDataList = [];
 let inProgress = false;
 let isPlaying = false;
 // 제시어 -> 랜덤 설정 예정
-let msg = "사과";
+const keywords = [{}];
+let msg = "낙타";
 
 const getResult = async (userDataList) => {
     // AI server url 넣을 거임
-    const url = "http://54.153.60.130:5000/get/userlist";
-    let json = JSON.stringify({ keyword: "apple", users: userDataList });
+    const url = "http://54.215.107.130:5000/get/userlist";
+    let json = JSON.stringify({ keyword: "camel", users: userDataList });
     try {
         const gameResult = await axios.post(url, json, {
             headers: { "content-type": "application/json" },
@@ -57,7 +58,7 @@ const socketController = (socket, io) => {
     };
 
     const inGame = () => {
-        let gameTimer = 50;
+        let gameTimer = 30;
         let gameCountDown = setInterval(() => {
             broadcastAll(events.gameCount, { timer: gameTimer });
             gameTimer--;
