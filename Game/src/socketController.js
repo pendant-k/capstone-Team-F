@@ -1,5 +1,6 @@
 import events from "./events";
 import axios from "axios";
+import { keywordsEng, keywordsKor } from "./constants";
 
 let sockets = [];
 let userDataList = [];
@@ -8,19 +9,27 @@ let userDataList = [];
 // true 일 때 유저 입장 막기
 let inProgress = false;
 let isPlaying = false;
+let readyCount = 0;
 // 제시어 -> 랜덤 설정 예정
-const keywords = [{}];
-let msg = "낙타";
+let keywordIdx = 0;
+let msg = "";
+let keywordToSend = "";
+
+function getRandomNumber() {
+    let result = Math.floor(Math.random() * 99);
+    return result;
+}
 
 const getResult = async (userDataList) => {
     // AI server url 넣을 거임
     const url = "http://54.215.107.130:5000/get/userlist";
-    let json = JSON.stringify({ keyword: "camel", users: userDataList });
+    let json = JSON.stringify({ keyword: keywordToSend, users: userDataList });
     try {
-        const gameResult = await axios.post(url, json, {
+        let gameResult = await axios.post(url, json, {
             headers: { "content-type": "application/json" },
         });
-        console.log(gameResult.data);
+        let obj = JSON.parse(gameResult);
+        return obj;
     } catch (e) {
         console.log("python server connect error", e);
     }
@@ -48,7 +57,10 @@ const socketController = (socket, io) => {
                 broadcastAll(events.startCount, { timer: startTimer });
                 console.log(startTimer);
                 startTimer--;
-                if (startTimer === 0) {
+                if (startTimer === -1) {
+                    keywordIdx = getRandomNumber();
+                    msg = keywordsKor[keywordIdx];
+                    keywordToSend = keywordsEng[keywordIdx];
                     broadcastAll(events.gameStarted, { msg });
                     inGame();
                     clearInterval(startCountDown);
@@ -58,11 +70,11 @@ const socketController = (socket, io) => {
     };
 
     const inGame = () => {
-        let gameTimer = 30;
+        let gameTimer = 10;
         let gameCountDown = setInterval(() => {
             broadcastAll(events.gameCount, { timer: gameTimer });
             gameTimer--;
-            if (gameTimer === 0) {
+            if (gameTimer === -1) {
                 console.log("게임 종료!");
                 broadcastAll(events.gameEnd);
                 clearInterval(gameCountDown);
@@ -83,9 +95,9 @@ const socketController = (socket, io) => {
         // count # of users
         broadcast(events.newUser, { nickname });
         sendUserUpdate();
-        if (sockets.length === 2) {
-            startGame();
-        }
+        // if (sockets.length === 2) {
+        //     startGame();
+        // }
     });
     socket.on(events.disconnect, () => {
         sockets = sockets.filter(
@@ -104,13 +116,24 @@ const socketController = (socket, io) => {
         broadcast(events.newMsg, { message, nickname: socket.nickname });
     });
 
-    socket.on(events.uploadImg, ({ user }) => {
+    socket.on(events.uploadImg, async ({ user }) => {
         userDataList.push(user);
         if (userDataList.length === sockets.length) {
-            console.log("유저 데이터 받아오기 테스트입니다.");
-            console.log(userDataList);
-            getResult(userDataList);
+            let resObj = getResult(userDataList);
+            let arr = resObj["result"];
+            broadcastAll(events.gameResult, { arr });
         }
+    });
+    socket.on(events.gameReady, () => {
+        ++readyCount;
+        console.log(readyCount);
+        if (readyCount === sockets.length) {
+            startGame();
+        }
+    });
+
+    socket.on(events.gameReadyNot, () => {
+        --readyCount;
     });
 };
 

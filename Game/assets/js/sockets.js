@@ -5,6 +5,7 @@ import {
     handleGameStarted,
     handleGameCount,
     handleGameEnd,
+    handleGameResult,
 } from "./game";
 import { handleUploadImg } from "./uploadImg";
 import { handleUserUpdate } from "./users";
@@ -30,4 +31,5 @@ export const initSockets = (aSocket) => {
     aSocket.on(events.gameStarted, handleGameStarted);
     aSocket.on(events.gameCount, handleGameCount);
     aSocket.on(events.gameEnd, handleGameEnd);
+    aSocket.on(events.gameResult, handleGameResult);
 };

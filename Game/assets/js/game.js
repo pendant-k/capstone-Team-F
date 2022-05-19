@@ -3,6 +3,11 @@ import { getSocket } from "./sockets";
 const info = document.getElementById("jsInfo");
 const counter = document.getElementById("jsTimer");
 const answer = document.getElementById("jsKeyword");
+const gameResult = document.getElementById("jsResult");
+const restartBtn = document.getElementById("jsRestart");
+const ready = document.getElementById("jsReady");
+
+let isReady = false;
 
 export const handleGameStart = ({ timer }) => {
     info.innerText = `${timer}초 후 게임이 시작됩니다.`;
@@ -32,3 +37,32 @@ export const handleGameEnd = () => {
     console.log(dataURL);
     getSocket().emit(window.events.uploadImg, { user: user });
 };
+
+export const handleGameResult = ({ result }) => {
+    gameResult.className = "gameEnd";
+    const winner = document.createElement("span");
+    winner.innerText = result;
+    gameResult.appendChild(winner);
+};
+
+if (restartBtn) {
+    restartBtn.addEventListener("click", () => {
+        console.log("btn clicked");
+    });
+}
+
+if (ready) {
+    ready.addEventListener("click", () => {
+        if (!isReady) {
+            getSocket().emit(window.events.gameReady, {});
+            ready.innerText = "준비 취소";
+            console.log("im ready");
+            isReady = true;
+        } else if (isReady) {
+            getSocket().emit(window.events.gameReadyNot, {});
+            ready.innerText = "게임 준비";
+            console.log("im not ready");
+            isReady = false;
+        }
+    });
+}

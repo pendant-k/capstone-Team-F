@@ -9,11 +9,15 @@ const events = {
     newMsg: "newMsg",
     userUpdate: "userUpdate",
     uploadImg: "uploadImg",
+    gameReady: "gameReady",
     gameStart: "gameStart",
     startCount: "startCount",
     gameStarted: "gameStarted",
     gameCount: "gameCount",
     gameEnd: "gameEnd",
+    gameResult: "gameResult",
+    gameRestart: "gameRestart",
+    gameReadyNot: "gameReadyNot",
 };
 
 export default events;

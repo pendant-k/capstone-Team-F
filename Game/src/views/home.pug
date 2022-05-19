@@ -10,6 +10,11 @@ html(lang="en")
         <link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&display=swap" rel="stylesheet">
         title AI,GO DOODLE!
     body
+        .gameResult#jsResult
+            p 결과 발표!
+            p 키워드 : 낙타
+            p#jsWinner 우승자: 김영현
+            span.restart__btn#jsRestart 다시하기
         .loginBox
                 h1.loginBox__title AI, GO DOODLE!
                 form#jsLogin
@@ -32,11 +37,12 @@ html(lang="en")
                 ul.chat__messages#jsMessages
                 form.chat__form#jsSendMsg
                     input(placeholder="메시지를 입력해주세요.", type="text")
+                button.ready__btn#jsReady 게임 준비
     
         script.
             window.events = !{events}
         script(src="/socket.io/socket.io.js")
         script(src="/js/main.js") 
     footer
-        audio(src="/assets/bgm.mp3" controls loop)
+        audio(src="" controls loop)
         p Capstone Team F project AI,GO DOODLE!

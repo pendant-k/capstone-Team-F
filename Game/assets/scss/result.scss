@@ -1,0 +1,16 @@
+.gameResult {
+        display: none;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        background-color: white;
+        border-radius: 5px;
+        width: 50%;
+        height: 50%;
+        position: absolute;
+        z-index: 2;
+        box-shadow: $boxShadow;
+        .restart__btn {
+            padding-top: 30px;
+        }
+      }
