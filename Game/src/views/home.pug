@@ -29,20 +29,21 @@ html(lang="en")
                     #jsNotifs
                     canvas.canvas#jsCanvas
                     .controls#jsControls
-                        button#jsRemove ↺
+                        button.reset__btn#jsRemove ↺
+                button.ready__btn#jsReady 게임 준비
                 .gameName AI, GO DOODLE
+                audio(src="" controls loop)
             .chat
                 .user__count#jsUsers
                 //- .player__board#jsPBoard
                 ul.chat__messages#jsMessages
                 form.chat__form#jsSendMsg
                     input(placeholder="메시지를 입력해주세요.", type="text")
-                button.ready__btn#jsReady 게임 준비
     
         script.
             window.events = !{events}
         script(src="/socket.io/socket.io.js")
         script(src="/js/main.js") 
     footer
-        audio(src="" controls loop)
+        
         p Capstone Team F project AI,GO DOODLE!
