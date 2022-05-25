@@ -2,6 +2,7 @@ import events from "./events";
 import axios from "axios";
 import { keywordsEng, keywordsKor } from "./constants";
 
+// global variables
 let sockets = [];
 let userDataList = [];
 // game start timer
@@ -9,20 +10,31 @@ let userDataList = [];
 // true 일 때 유저 입장 막기
 let inProgress = false;
 let isPlaying = false;
-let readyCount = 0;
 // 제시어 -> 랜덤 설정 예정
 let keywordIdx = 0;
 let msg = "";
 let keywordToSend = "";
+let readyCount = 0;
+
+const AIURL = "";
 
 function getRandomNumber() {
     let result = Math.floor(Math.random() * 99);
     return result;
 }
 
+// game reset function
+const resetGame = () => {
+    inProgress = false;
+    readyCount = 0;
+    userDataList = [];
+    keywordIdx = 0;
+    keywordToSend = "";
+};
+
 const getResult = async (userDataList) => {
     // AI server url 넣을 거임
-    const url = "http://54.215.107.130:5000/get/userlist";
+    const url = AIURL;
     let json = JSON.stringify({ keyword: keywordToSend, users: userDataList });
     try {
         let gameResult = await axios.post(url, json, {
@@ -55,7 +67,7 @@ const socketController = (socket, io) => {
             // game start count down
             let startCountDown = setInterval(() => {
                 broadcastAll(events.startCount, { timer: startTimer });
-                console.log(startTimer);
+                console.log("game timer", startTimer);
                 startTimer--;
                 if (startTimer === -1) {
                     keywordIdx = getRandomNumber();
@@ -63,6 +75,9 @@ const socketController = (socket, io) => {
                     keywordToSend = keywordsEng[keywordIdx];
                     broadcastAll(events.gameStarted, { msg });
                     inGame();
+                    clearInterval(startCountDown);
+                }
+                if (!inProgress) {
                     clearInterval(startCountDown);
                 }
             }, 1000);
@@ -81,17 +96,17 @@ const socketController = (socket, io) => {
             }
         }, 1000);
     };
-
-    const endGame = () => {
-        console.log("game end");
+    const endGameDisconnect = () => {
         inProgress = false;
-        console.log(inProgress);
+        broadcastAll(events.gameDisconnect);
     };
+
+    // inProgress game 입장 금지 기능
 
     socket.on(events.setNickname, ({ nickname }) => {
         socket.nickname = nickname;
         // add user to server's user list
-        sockets.push({ id: socket.id, point: 0, nickname: nickname });
+        sockets.push({ id: socket.id, nickname: nickname });
         // count # of users
         broadcast(events.newUser, { nickname });
         sendUserUpdate();
@@ -99,6 +114,7 @@ const socketController = (socket, io) => {
         //     startGame();
         // }
     });
+
     socket.on(events.disconnect, () => {
         sockets = sockets.filter(
             // remove user when he disconnected
@@ -107,8 +123,8 @@ const socketController = (socket, io) => {
         // discount # of users
         broadcast(events.disconnected, { nickname: socket.nickname });
         sendUserUpdate();
-        if (sockets.length === 1) {
-            endGame();
+        if (inProgress && sockets.length < 2) {
+            endGameDisconnect();
         }
     });
 
@@ -119,14 +135,16 @@ const socketController = (socket, io) => {
     socket.on(events.uploadImg, async ({ user }) => {
         userDataList.push(user);
         if (userDataList.length === sockets.length) {
-            let resObj = getResult(userDataList);
-            let arr = resObj["result"];
+            console.log("send img to server correctly");
+            let resObj = await getResult(userDataList);
+            let arr = resObj;
+            console.log(arr);
             broadcastAll(events.gameResult, { arr });
         }
     });
     socket.on(events.gameReady, () => {
         ++readyCount;
-        console.log(readyCount);
+        console.log("ready count", readyCount);
         if (readyCount === sockets.length) {
             startGame();
         }
@@ -135,9 +153,20 @@ const socketController = (socket, io) => {
     socket.on(events.gameReadyNot, () => {
         --readyCount;
     });
+    // game reset하기
+    socket.on(events.restart, () => {
+        resetGame();
+        // 브라우저 결과창 모두 닫기?
+        broadcastAll(events.gameReset, {});
+    });
 };
 
 // 접속한 유저 print
 // setInterval(() => console.log(sockets), 10000);
 
 export default socketController;
+
+// game reset function
+// game restart flow
+// 결과창 출력 UI작업 + 기능 작업 -> 우승자 추출하기
+// event 정리

@@ -18,6 +18,9 @@ const events = {
     gameResult: "gameResult",
     gameRestart: "gameRestart",
     gameReadyNot: "gameReadyNot",
+    gameDisconnect: "gameDisconnect",
+    gameRestart: "gameRestart",
+    gameReset: "gameReset",
 };
 
 export default events;
