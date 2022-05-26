@@ -24,6 +24,7 @@
     "socket.io": "^4.4.1"
   },
   "scripts": {
+    "start":"nodemon --exec babel-node src/server --ignore assets/ --ignore src/static",
     "dev:server": "nodemon --exec babel-node src/server --ignore assets/ --ignore src/static",
     "dev:assets": "gulp"
   }
