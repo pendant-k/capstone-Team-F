@@ -4,6 +4,9 @@ const info = document.getElementById("jsInfo");
 const counter = document.getElementById("jsTimer");
 const answer = document.getElementById("jsKeyword");
 const gameResult = document.getElementById("jsResult");
+const gameWinner = document.getElementById("jsWinner");
+const resultKeyword = document.getElementById("jsResultKeyword");
+
 const restartBtn = document.getElementById("jsRestart");
 const ready = document.getElementById("jsReady");
 
@@ -25,13 +28,17 @@ const gameReset = () => {
     info.innerText = GAMEINFO;
     counter.innerText = "";
     answer.innerText = "";
+    gameWinner.innerText = "";
+    resultKeyword.innerText = "";
+    answer.innerHTML = "";
+    gameResult.className = "gameResult";
+    // canvas 초기화
+    ctx.fillRect(0, 0, CANVAS_SIZE, CANVAS_SIZE);
     // ready 초기화
     isReady = false;
     ready.innerText = "게임 준비";
     console.log("im not ready");
     // server socket -> 변수들 초기화시키기 ?
-    getSocket().emit(window.events.restartCount, {});
-    ctx.fillRect(0, 0, CANVAS_SIZE, CANVAS_SIZE);
 };
 
 export const handleGameStart = ({ timer }) => {
@@ -50,6 +57,7 @@ export const handleGameCount = ({ timer }) => {
     counter.innerText = `${timer}`;
 };
 
+// canvas 그림 그리기 방지?
 export const handleGameEnd = () => {
     // 게임 종료 시점의 canvas dataurl 가져오기
     const image = document.getElementById("jsCanvas");
@@ -67,11 +75,19 @@ export const handleGameDisconnect = () => {
     gameReset();
 };
 
-export const handleGameResult = ({ result }) => {
-    gameResult.className = "gameEnd";
-    const winner = document.createElement("span");
-    winner.innerText = result;
-    gameResult.appendChild(winner);
+export const handleGameReset = () => {
+    gameReset();
+};
+
+export const handleGameResult = ({ winner, keyword }) => {
+    console.log(winner, keyword);
+    resultKeyword.innerText = `키워드 : ${keyword}`;
+    gameResult.className += " resultShow";
+    if (winner === "무승부") {
+        gameWinner.innerText = `무승부`;
+    } else {
+        gameWinner.innerText = `우승자: ${winner}`;
+    }
 };
 
 if (ready) {
@@ -93,6 +109,6 @@ if (ready) {
 // 재시작 기능
 if (restartBtn) {
     restartBtn.addEventListener("click", () => {
-        gameReset();
+        getSocket().emit(window.events.gameRestart, {});
     });
 }

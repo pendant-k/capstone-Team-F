@@ -16,12 +16,33 @@ let msg = "";
 let keywordToSend = "";
 let readyCount = 0;
 
-const AIURL = "";
+const AIURL = "http://13.57.29.21:5000/get/userlist";
 
 function getRandomNumber() {
     let result = Math.floor(Math.random() * 99);
     return result;
 }
+
+const getWinner = (resultArr) => {
+    console.log("resultArr test", resultArr);
+    let keyword = resultArr[0]["predict"];
+    let winner = resultArr[0]["nickname"];
+    if (resultArr[0]["rank"] === 0) {
+        return {
+            winner: "무승부",
+            keyword: keyword,
+        };
+    }
+    resultArr.map((result) => {
+        if (result["rank"] == 1) {
+            winner = result["nickname"];
+        }
+    });
+    return {
+        winner: winner,
+        keyword: keyword,
+    };
+};
 
 // game reset function
 const resetGame = () => {
@@ -40,8 +61,7 @@ const getResult = async (userDataList) => {
         let gameResult = await axios.post(url, json, {
             headers: { "content-type": "application/json" },
         });
-        let obj = JSON.parse(gameResult);
-        return obj;
+        return gameResult.data;
     } catch (e) {
         console.log("python server connect error", e);
     }
@@ -55,6 +75,18 @@ const socketController = (socket, io) => {
     // io.emit (클라이언트 전체에게 이벤트 처리하기)
     // 모든 클라이언트에 이벤트 발생
     const broadcastAll = (event, data) => io.emit(event, data);
+
+    // sever and game 예기치 않은 상황에서 종료시키기
+    const serverAndGameReset = () => {
+        inProgress = false;
+        readyCount = 0;
+        userDataList = [];
+        keywordIdx = 0;
+        keywordToSend = "";
+        broadcastAll(events.gameReset);
+        console.log("server and game reset!");
+    };
+
     const sendUserUpdate = () => {
         broadcastAll(events.userUpdate, { sockets });
     };
@@ -78,6 +110,7 @@ const socketController = (socket, io) => {
                     clearInterval(startCountDown);
                 }
                 if (!inProgress) {
+                    serverAndGameReset();
                     clearInterval(startCountDown);
                 }
             }, 1000);
@@ -87,44 +120,39 @@ const socketController = (socket, io) => {
     const inGame = () => {
         let gameTimer = 10;
         let gameCountDown = setInterval(() => {
-            broadcastAll(events.gameCount, { timer: gameTimer });
-            gameTimer--;
-            if (gameTimer === -1) {
-                console.log("게임 종료!");
-                broadcastAll(events.gameEnd);
+            if (inProgress === true) {
+                broadcastAll(events.gameCount, { timer: gameTimer });
+                gameTimer--;
+                if (gameTimer === -1) {
+                    console.log("게임 종료!");
+                    broadcastAll(events.gameEnd);
+                    clearInterval(gameCountDown);
+                }
+            } else {
+                serverAndGameReset();
                 clearInterval(gameCountDown);
             }
         }, 1000);
     };
-    const endGameDisconnect = () => {
-        inProgress = false;
-        broadcastAll(events.gameDisconnect);
-    };
 
     // inProgress game 입장 금지 기능
+    // socket으로 싸줘야할듯
 
     socket.on(events.setNickname, ({ nickname }) => {
         socket.nickname = nickname;
         // add user to server's user list
         sockets.push({ id: socket.id, nickname: nickname });
-        // count # of users
         broadcast(events.newUser, { nickname });
         sendUserUpdate();
-        // if (sockets.length === 2) {
-        //     startGame();
-        // }
     });
 
     socket.on(events.disconnect, () => {
-        sockets = sockets.filter(
-            // remove user when he disconnected
-            (aSocket) => aSocket.id !== socket.id
-        );
-        // discount # of users
+        // remove user when he disconnected
+        sockets = sockets.filter((aSocket) => aSocket.id !== socket.id);
         broadcast(events.disconnected, { nickname: socket.nickname });
         sendUserUpdate();
         if (inProgress && sockets.length < 2) {
-            endGameDisconnect();
+            serverAndGameReset();
         }
     });
 
@@ -137,9 +165,13 @@ const socketController = (socket, io) => {
         if (userDataList.length === sockets.length) {
             console.log("send img to server correctly");
             let resObj = await getResult(userDataList);
-            let arr = resObj;
-            console.log(arr);
-            broadcastAll(events.gameResult, { arr });
+            let resultArr = resObj["result"];
+            let sendObj = getWinner(resultArr);
+            console.log("sendObj test", sendObj);
+            broadcastAll(events.gameResult, {
+                winner: sendObj["winner"],
+                keyword: keywordsKor[keywordIdx],
+            });
         }
     });
     socket.on(events.gameReady, () => {
@@ -154,7 +186,7 @@ const socketController = (socket, io) => {
         --readyCount;
     });
     // game reset하기
-    socket.on(events.restart, () => {
+    socket.on(events.gameRestart, () => {
         resetGame();
         // 브라우저 결과창 모두 닫기?
         broadcastAll(events.gameReset, {});
