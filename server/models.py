@@ -1,8 +1,4 @@
-import torch
 import torch.nn as nn
-from torch.nn import functional as F
-from torch import optim
-import time
 
 class BasicBlock(nn.Module):
   expansion=1
@@ -62,7 +58,7 @@ class BottleNeck(nn.Module):
 
 
 class ResNet(nn.Module):
-  def __init__(self,block, num_block,num_classes=50,init_weights=True):
+  def __init__(self,block, num_block,num_classes=25,init_weights=True):
     super().__init__()
 
     self.in_channels=64

@@ -12,10 +12,22 @@ import json
 import cgi
 import torch
 import asyncio
-import demo_utils
+import utils
 import models
 from io import StringIO
 
+
+def threshold1(pix):
+    if pix>=0:
+        return pix
+    else:
+        return 0
+
+def threshold2(pix,len):
+    if pix<len:
+        return pix
+    else:
+        return len
 
 def get_keywords_and_models(path='./',num_models=4):
     keywords_list=[]
@@ -46,13 +58,27 @@ def preprocess(user_image):
     img = np.array(Image.open(user_image))
 
     image=255-img
+
+    # check if the user_image is empty
+    if np.sum(np.array(image))==0:
+        return None
+
     res,thr=cv2.threshold(image,127,255,cv2.THRESH_BINARY)
     contours,_=cv2.findContours(thr,cv2.RETR_EXTERNAL,cv2.CHAIN_APPROX_SIMPLE)
 
     cnt=contours[0]
     x,y,w,h=cv2.boundingRect(cnt)
-    
-    image=image[y:y+h,x:x+w]
+
+    b_h,b_w=image.shape
+
+#    image=image[y:y+h,x:x+w]
+
+    if w>=h: # 가로가 더 긴 경우 -> 세로로 bounding box 확장
+        extend=int((w-h)/2)
+        image=image[threshold1(y-extend):threshold2(y+h+extend,b_h),x:x+w]
+    else: # 세로가 더 긴 경우 -> 가로로 bounding box 확장
+        extend=int((h-w)/2)
+        image=image[y:y+h,threshold1(x-extend):threshold2(x+w+extend,b_w)]
 
     image=cv2.resize(image,dsize=(32,32))
     image=np.array(image)
@@ -78,6 +104,10 @@ def accuracy_for_keyword(keyword,user_image,keywords_list,models_list):
     model.eval()
 
     x=preprocess(user_image)
+
+    if x==None:
+        return 0.0
+
     y=model(x)
 
     y=y.detach().numpy()
